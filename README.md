@@ -1,146 +1,74 @@
-# AMH Library — Artificial Mind Hub
-https://amhlibrary.pythonanywhere.com/
+# AMH Library
 
-A premium, production-ready library management system built with Flask + PostgreSQL.
+A web-based library management system built with Flask, designed around catalog discovery, user accounts, saved books, and an administrative workspace.
 
-**Created by:** Ammar Mostafa Hendam  
-**Stack:** Python Flask · PostgreSQL · Bootstrap Icons · Vanilla JS
+**Live demo:** https://amhlibrary.pythonanywhere.com/
 
----
+## Overview
 
-## 🚀 Quick Start
+AMH Library brings common library workflows into one web application: browsing and searching the catalog, viewing book details, saving favorites, tracking recently viewed items, and managing catalog data from an admin area.
 
-### 1. Clone & Create Virtual Environment
-```bash
-cd amh_library
-python3 -m venv venv
-source venv/bin/activate       # Linux/Mac
-venv\Scripts\activate          # Windows
-```
+## Features
 
-### 2. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
+- **Accounts and access control:** registration, login, logout, password reset, and role-aware access.
+- **Catalog:** browse, search, filter by category, and open individual book pages.
+- **Personal library tools:** favorites and recently viewed books.
+- **Admin workspace:** manage books, categories, users, contact messages, and dashboard statistics.
+- **Security foundations:** password hashing, CSRF protection, and validation controls documented by the project.
+- **Interface:** responsive pages with a dark, typography-led visual design.
 
-### 3. Configure Environment
-```bash
-cp .env.example .env
-# Edit .env with your database URL and secret key
-```
+## Technology
 
-### 4. Setup Database (PostgreSQL)
-```sql
--- In psql:
-CREATE DATABASE amh_library;
-CREATE USER amh_user WITH PASSWORD 'yourpassword';
-GRANT ALL PRIVILEGES ON DATABASE amh_library TO amh_user;
-```
+| Area | Technology |
+|---|---|
+| Backend | Python, Flask |
+| Data access | Flask-SQLAlchemy, SQLAlchemy |
+| Authentication | Flask-Login |
+| Forms and CSRF | Flask-WTF, WTForms |
+| Database migrations | Flask-Migrate |
+| Email | Flask-Mail |
+| Frontend | Jinja templates, CSS, vanilla JavaScript |
 
-Update `DATABASE_URL` in `.env`:
-```
-DATABASE_URL=postgresql://amh_user:yourpassword@localhost/amh_library
-```
+The checked-in sample environment defaults to SQLite for local development. The previous documentation also described PostgreSQL deployment; validate the database driver and configuration in the extracted source package before treating that path as deployment-ready.
 
-### 5. Initialize & Seed Database
-```bash
-flask db init
-flask db migrate -m "initial"
-flask db upgrade
-python seed.py
-```
+## Repository contents
 
-### 6. Run the App
-```bash
-python run.py
-```
+The current GitHub repository stores the application source as `AMH LIBRARY.zip` rather than exposing the source tree file-by-file. Extract the archive before working on the app. For easier code review, contributions, and hiring review, the next repository-maintenance step is to commit the actual source tree directly and keep generated archives out of the main browsing path.
 
-Visit: **http://localhost:5000**
+## Local setup
 
----
+1. Clone this repository and extract `AMH LIBRARY.zip`.
+2. Create and activate a virtual environment from the extracted application directory.
+3. Install the dependencies listed in the repository's `requirements.txt`.
+4. Copy `.env.example` into the extracted application directory as `.env`.
+5. Set a unique `SECRET_KEY`, review `DATABASE_URL`, and add mail credentials only when email features are needed.
+6. Follow the migration and startup instructions in the extracted source package, then run the application with its documented entry point.
 
-## 🔑 Default Admin Credentials
+The source archive should be inspected before assuming exact migration commands or production deployment settings.
 
-| Field    | Value                    |
-|----------|--------------------------|
-| Email    | admin@amhlibrary.com     |
-| Password | Admin@1234               |
+## Configuration
 
-> ⚠️ **Change the admin password immediately after first login!**
+The root `.env.example` contains placeholders only. Key settings include:
 
-Admin panel: **http://localhost:5000/admin**
+- `FLASK_CONFIG` — selects the application configuration.
+- `SECRET_KEY` — set a long, randomly generated secret; do not reuse a public value.
+- `DATABASE_URL` — defaults to a local SQLite database for development.
+- `MAIL_SERVER`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD` — SMTP settings, if email is enabled.
+- `ADMIN_EMAIL` — administrator contact/configuration value.
 
----
+Never commit a real `.env` file, API key, email password, or production secret.
 
-## 📁 Project Structure
+## Security notes
 
-```
-amh_library/
-├── app/
-│   ├── __init__.py          # App factory
-│   ├── models.py            # Database models
-│   ├── forms.py             # WTForms
-│   ├── utils.py             # Helpers & decorators
-│   ├── errors.py            # Error handlers
-│   ├── auth/                # Authentication blueprint
-│   ├── main/                # Main pages blueprint
-│   ├── library/             # Library browse blueprint
-│   ├── admin/               # Admin panel blueprint
-│   ├── templates/           # Jinja2 HTML templates
-│   └── static/              # CSS, JS, uploads
-├── config.py                # Configuration classes
-├── run.py                   # Development server
-├── wsgi.py                  # PythonAnywhere entry point
-├── seed.py                  # Database seeder
-└── requirements.txt
-```
+- **No admin password is published in this README.** Do not rely on hard-coded or seeded demo credentials in a public deployment.
+- Before exposing a deployment publicly, verify how the initial administrator is provisioned and change/remove any default account.
+- Use a unique production secret, set production-safe configuration, and confirm HTTPS, database permissions, and email credentials.
+- If a credential has ever been committed to Git history, changing the current file alone does not invalidate it; rotate the credential at its source.
+
+## Project status
+
+This repository currently provides a packaged source archive and setup documentation. A source-tree review, dependency verification, and fresh-install test are still needed before making stronger claims about reproducible deployment.
 
 ---
 
-## 🌐 Deploying on PythonAnywhere
-
-1. Upload project files (or clone from GitHub)
-2. Create a virtual environment and install requirements
-3. Set up a PostgreSQL database in the PythonAnywhere dashboard
-4. Edit `wsgi.py` with your username/path
-5. Set environment variables in the PythonAnywhere web app config
-6. Run `python seed.py` from the PythonAnywhere console
-7. Reload the web app
-
-### Environment Variables on PythonAnywhere
-In your web app's WSGI config, add:
-```python
-os.environ['SECRET_KEY'] = 'your-secret-key'
-os.environ['DATABASE_URL'] = 'postgresql://...'
-os.environ['FLASK_CONFIG'] = 'production'
-```
-
----
-
-## ✨ Features
-
-- **Authentication**: Register, login, logout, password reset, role-based access
-- **Admin Dashboard**: Stats, charts, manage books/categories/users/messages
-- **Library**: Browse, search, filter by category, book detail pages
-- **User Features**: Favorites, recently viewed, profile
-- **Security**: CSRF protection, password hashing, SQL injection prevention, XSS protection
-- **Design**: Dark-mode premium UI with Cormorant Garamond typography
-- **14 Categories**: Pre-seeded with 60+ books from your collection
-
----
-
-## 📦 Database Schema
-
-| Table             | Description                              |
-|-------------------|------------------------------------------|
-| `users`           | User accounts with role-based access     |
-| `categories`      | Book categories with icons & colors      |
-| `books`           | Full book records with links & metadata  |
-| `favorites`       | User ↔ book saved relationships          |
-| `recently_viewed` | Per-user reading history (last 20)       |
-| `activity_logs`   | All user actions for admin monitoring    |
-| `contact_messages`| Contact form submissions                 |
-
----
-
-*AMH Library © 2025 — Artificial Mind Hub*
+Maintained by **Ammar Mostafa Hendam**.
